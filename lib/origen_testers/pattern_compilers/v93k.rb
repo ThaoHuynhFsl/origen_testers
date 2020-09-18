@@ -260,7 +260,7 @@ module OrigenTesters
             contents = File.open(file, 'rb') { |f| f.read }
             new_contents = preprocess_avc(contents)
             new_avc_file = Pathname.new("#{job_avc_dir}/#{Pathname.new(file).basename}").cleanpath
-            File.open(new_avc_file, 'w') { |f| f.write(new_contents) }
+            File.open(new_avc_file, 'w') { |f| f.write(new_contents.force_encoding('UTF-8')) }
             avc_key = Pathname.new(file).basename.sub_ext('').to_s.to_sym
             @vec_per_frame[avc_key] = digcap? ? avc_digcap_vpf(new_contents) : 0
           end
@@ -312,10 +312,14 @@ module OrigenTesters
       # Given the file contents, parse and calculate number of capture vectors
       def avc_digcap_vpf(contents)
         capture_vectors = 0
+        factor = 1
         contents.each_line do |line|
-          if line[0] != "\#"     # skip any comment lines
-            capture_vectors += 1 if /#{digcap.capture_string}/.match(line)
+          next if line.match(/^\s*\#/)
+          if line.match(/^\s*SQPG\s+LBGN\s+(\d+)\s*;/)
+            factor = Regexp.last_match(1).to_i
           end
+          factor = 1 if line.match(/^\s*SQPG\s+LEND\s*;/)
+          capture_vectors += factor if /#{digcap.capture_string}/.match(line)
         end
         capture_vectors
       end

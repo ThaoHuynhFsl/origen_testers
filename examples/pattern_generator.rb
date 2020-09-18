@@ -1,10 +1,16 @@
 # Pattern generator tests
 
 # Legacy tests
-ARGV = %w(j750.list -t legacy -e j750.rb -r approved/j750)
+ARGV = %w(j750.list j750_workout_inhibited -t legacy -e j750.rb -r approved/j750)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
-ARGV = %w(v93k_workout -t legacy -e v93k.rb -r approved/v93k)
+ARGV = %w(j750_workout_inhibited -t legacy -e ultraflex.rb -r approved/ultraflex)
+load "#{Origen.top}/lib/origen/commands/generate.rb"
+
+ARGV = %w(v93k_workout v93k_workout_inhibited -t legacy -e v93k.rb -r approved/v93k)
+load "#{Origen.top}/lib/origen/commands/generate.rb"
+
+ARGV = %w(v93k_workout -t legacy -e v93k_smt8.rb -r approved/v93k_smt8)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
 # Common tests
@@ -20,13 +26,19 @@ load "#{Origen.top}/lib/origen/commands/generate.rb"
 ARGV = %w(regression.list -t dut.rb -e v93k.rb -r approved/v93k)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
-ARGV = %w(tester_overlay tester_store -t dut3.rb -e uflex -r approved/generic_overlay_capture/ultraflex)
+ARGV = %w(regression.list -t dut.rb -e v93k_smt8.rb -r approved/v93k_smt8)
+load "#{Origen.top}/lib/origen/commands/generate.rb"
+
+ARGV = %w(tester_overlay tester_store tester_overlay_no_start -t dut3.rb -e uflex -r approved/generic_overlay_capture/ultraflex)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
 ARGV = %w(tester_overlay tester_store -t dut3.rb -e j750.rb -r approved/generic_overlay_capture/j750)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
 ARGV = %w(tester_overlay tester_store -t dut3.rb -e v93k.rb -r approved/generic_overlay_capture/v93k)
+load "#{Origen.top}/lib/origen/commands/generate.rb"
+
+ARGV = %w(tester_overlay tester_store -t dut3.rb -e v93k_smt8.rb -r approved/generic_overlay_capture/v93k_smt8)
 load "#{Origen.top}/lib/origen/commands/generate.rb"
 
 ARGV = %w(pxie6570.list -t dut3.rb -e pxie6570.rb -r approved/pxie6570)

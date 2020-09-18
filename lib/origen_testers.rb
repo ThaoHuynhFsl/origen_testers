@@ -3,7 +3,6 @@ require_relative '../config/application.rb'
 
 require 'active_support/concern'
 require 'require_all'
-require 'atp'
 require 'pathname'
 require 'origen_testers/origen_ext/generator/pattern'
 require 'origen_testers/origen_ext/generator/flow'
@@ -24,6 +23,8 @@ module OrigenTesters
   autoload :Flow,               'origen_testers/flow'
   autoload :NoInterface,        'origen_testers/no_interface'
   autoload :MemoryStyle,        'origen_testers/memory_style'
+  autoload :ATP,                'origen_testers/atp'
+  autoload :Charz,              'origen_testers/charz'
 
   # not yet autoload :Time,     'origen_testers/time'
 
@@ -38,7 +39,11 @@ module OrigenTesters
       ATP::Program.load(f)
     end
   end
+
+  require 'origen_testers/decompiler'
+  extend Decompiler::API
 end
+autoload :ATP, 'origen_testers/atp_deprecation'
 
 require 'origen_testers/igxl_based_tester'
 require 'origen_testers/smartest_based_tester'
@@ -50,3 +55,5 @@ require 'origen_testers/pattern_compilers/runner'
 require 'origen_testers/callback_handlers'
 require 'origen_testers/origen_ext/pins/pin'
 require 'origen_testers/origen_ext/pins/pin_collection'
+require 'origen_testers/origen_ext/pins/timing'
+require 'origen_testers/origen_ext/pins/timing/timeset'

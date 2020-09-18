@@ -10,6 +10,7 @@ module OrigenTesters
       attr_accessor :digcap_pins
       attr_accessor :digsrc_settings
       attr_accessor :digcap_settings
+      attr_accessor :target_load_count
 
       include OrigenARMDebug
       include Origen::TopLevel
@@ -24,6 +25,8 @@ module OrigenTesters
           test_generic_overlay_capture: options[:test_generic_overlay_capture]
         }
 
+        @target_load_count = 0
+
         add_pin :tclk
         add_pin :tdi
         add_pin :tdo
@@ -36,6 +39,18 @@ module OrigenTesters
           add_pin_group :pa, :pa2, :pa1, :pa0
           add_pin_alias :tdi_a, :tdi
         end
+
+        if options[:extra_pins]
+          options[:extra_pins].times do |i|
+            add_pin "PIN_#{i}".to_sym
+          end
+        end
+        # Add capitalized equivalent pins
+        add_pin_alias :TCLK, :tclk
+        add_pin_alias :TDI, :tdi
+        add_pin_alias :TDO, :tdo
+        add_pin_alias :TMS, :tms
+
         # add_pin_group :jtag, :tdi, :tdo, :tms
         add_power_pin_group :vdd1
         add_power_pin_group :vdd2
@@ -73,6 +88,10 @@ module OrigenTesters
             tester.memory_test_en = true
           end
         end
+      end
+
+      def on_load_target
+        @target_load_count += 1
       end
 
       def startup(options)

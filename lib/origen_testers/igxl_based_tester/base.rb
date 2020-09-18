@@ -1,5 +1,12 @@
 module OrigenTesters
   module IGXLBasedTester
+    class << self
+      attr_reader :pat_extension
+      attr_reader :comment_char
+    end
+    @pat_extension = 'atp'
+    @comment_char = '//'
+
     # This is the base class of all IGXL-based testers
     class Base
       include VectorBasedTester
@@ -27,7 +34,7 @@ module OrigenTesters
         @counter_msb_bits = 0
         @max_repeat_loop = 65_535 # 16 bits
         @min_repeat_loop = 2
-        @pat_extension = 'atp'
+        @pat_extension = OrigenTesters::IGXLBasedTester.pat_extension
         @active_loads = true
         @pipeline_depth = 34
         @software_version = ''
@@ -277,7 +284,7 @@ module OrigenTesters
         options = { offset: 0
                   }.merge(options)
         update_vector microcode: 'stv', offset: options[:offset]
-        last_vector(options[:offset]).contains_capture = true
+        last_vector(options[:offset]).contains_capture = true unless @inhibit_vectors
       end
       alias_method :to_hram, :store
       alias_method :capture, :store
@@ -297,8 +304,10 @@ module OrigenTesters
         options = {
         }.merge(options)
 
-        preset_next_vector microcode: 'stv' do |vector|
-          vector.contains_capture = true
+        unless @inhibit_vectors
+          preset_next_vector microcode: 'stv' do |vector|
+            vector.contains_capture = true
+          end
         end
       end
       alias_method :store!, :store_next_cycle
@@ -327,8 +336,10 @@ module OrigenTesters
         options = {
           offset: 0
         }.merge(options)
-        called_subroutines << name.to_s.chomp unless called_subroutines.include?(name.to_s.chomp) || @inhibit_vectors
-        update_vector microcode: "call #{name}", offset: options[:offset]
+        unless @inhibit_vectors
+          called_subroutines << name.to_s.chomp unless called_subroutines.include?(name.to_s.chomp) || @inhibit_vectors
+          update_vector microcode: "call #{name}", offset: options[:offset]
+        end
       end
 
       # Start a subroutine.
@@ -341,11 +352,13 @@ module OrigenTesters
       #     < generate your subroutine vectors here >
       #     $tester.end_subroutine
       def start_subroutine(name, options = {})
-        local_subroutines << name.to_s.chomp unless local_subroutines.include?(name.to_s.chomp) || @inhibit_vectors
-        if $tester.ultraflex? && (name =~ /keep_?alive/ || options[:keep_alive])
-          microcode "keepalive subr #{name}:"
-        else
-          microcode "global subr #{name}:"
+        unless @inhibit_vectors
+          local_subroutines << name.to_s.chomp unless local_subroutines.include?(name.to_s.chomp) || @inhibit_vectors
+          if $tester.ultraflex? && (name =~ /keep_?alive/ || options[:keep_alive])
+            microcode "keepalive subr #{name}:"
+          else
+            microcode "global subr #{name}:"
+          end
         end
       end
 
@@ -580,7 +593,7 @@ module OrigenTesters
       #   $tester.label("something_significant",true) # apply global label
       def label(name, global = false)
         global_opt = (global) ? 'global ' : ''
-        microcode global_opt + name + ':'
+        microcode global_opt + name + ':' unless @inhibit_vectors
       end
 
       # * J750 Specific *
@@ -789,7 +802,7 @@ module OrigenTesters
 
       # Override this to force the formatting to match the v1 J750 model (easier diffs)
       def push_microcode(code) # :nodoc:
-        stage.store(code.ljust(65) + ''.ljust(31))
+        stage.store(code.ljust(65) + ''.ljust(31)) unless @inhibit_vectors
       end
       alias_method :microcode, :push_microcode
 
@@ -1027,6 +1040,20 @@ module OrigenTesters
 
         # stage = sub_name
       end # subroutine_overlay
+
+      # Disable the automatic addition of the digsrc start command at the beginning of the pattern
+      #
+      # @example
+      #   tester.digsrc_skip_start :pin_or_group_name
+      #
+      def digsrc_skip_start(pin_or_group)
+        pin_or_group = dut.pin(pin_or_group).name
+        if @overlay_history[pin_or_group].nil?
+          @overlay_history[pin_or_group] = { count: 0, is_digsrc: true, start_applied: true }
+        else
+          Origen.log.warn 'tester.digsrc_skip_start must be called before any overlay actions on the pin'
+        end
+      end
 
       # Perform digsrc overlay (called by tester.cycle)
       def digsrc_overlay(options = {})

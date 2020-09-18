@@ -93,6 +93,10 @@ module OrigenTesters
     end
     alias_method :uflex?, :ultraflex?
 
+    def igxl?
+      j750? || j750_hpt? || ultraflex?
+    end
+
     def stil?
       is_a?(OrigenTesters::StilBasedTester::Base)
     end
@@ -111,6 +115,14 @@ module OrigenTesters
 
     def doc?
       false
+    end
+
+    def smt7?
+      v93k? && smt_version.to_s[0] == '7'
+    end
+
+    def smt8?
+      v93k? && smt_version.to_s[0] == '8'
     end
 
     def annotate(msg, options = {})
@@ -227,6 +239,10 @@ module OrigenTesters
         repeat:    nil
       }.merge(options)
 
+      unless timeset.period_in_ns?
+        fail "You must supply a period_in_ns to timeset '#{timeset.name}' before you can cycle the tester!"
+      end
+      timeset.cycled = true
       if PatSeq.thread
         PatSeq.thread.cycle(options)
       else

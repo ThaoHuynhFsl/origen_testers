@@ -28,6 +28,10 @@ module OrigenTesters
       @comment_stack ||= []
     end
 
+    def self.name_stack
+      @name_stack ||= []
+    end
+
     def self.flow_comments
       @flow_comments
     end
@@ -42,6 +46,40 @@ module OrigenTesters
 
     def self.unique_ids=(val)
       @unique_ids = val
+    end
+
+    # Returns true if this is a top-level Origen test program flow
+    def top_level?
+      top_level == self
+    end
+
+    # Returns the flow's parent top-level flow object, or self if this is a top-level flow
+    def top_level
+      @top_level
+    end
+
+    # Returns the flow's immediate parent flow object, or nil if this is a top-level flow
+    def parent
+      @parent
+    end
+
+    # Returns a hash containing all child flows stored by their ID
+    def children
+      @children ||= {}.with_indifferent_access
+    end
+
+    # Returns the flow's ID prefixed with the IDs of its parent flows, joined by '.'
+    def path
+      @path ||= begin
+        ids = []
+        p = parent
+        while p
+          ids.unshift(p.id)
+          p = p.parent
+        end
+        ids << id
+        ids.map(&:to_s).join('.')
+      end
     end
 
     def lines
@@ -102,8 +140,8 @@ module OrigenTesters
         @throwaway ||= ATP::Flow.new(self)
       else
         @model ||= begin
-          f = program.flow(id, description: OrigenTesters::Flow.flow_comments)
-          @sig = flow_sig(id)
+          f = program.flow(try(:path) || id, description: OrigenTesters::Flow.flow_comments)
+          @sig = flow_sig(try(:path) || id)
           # f.id = @sig if OrigenTesters::Flow.unique_ids
           f
         end

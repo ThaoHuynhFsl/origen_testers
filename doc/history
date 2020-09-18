@@ -1,3 +1,194 @@
+<a class="anchor release_tag" name="v0_48_0"></a>
+<h1><a href="#v0_48_0">Tag: v0.48.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Priyavadan Kumar on 26-Aug-2020 09:03AM
+
+
+ * Characterization API updates from @CodyBriscoe
+
+<a class="anchor release_tag" name="v0_47_0"></a>
+<h1><a href="#v0_47_0">Tag: v0.47.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 05-Aug-2020 15:57PM
+
+
+* Allow the SMT8 "test\_text" value in the limits table to be specified
+* Fix program generation crash when a flow creates no variables (Cody Horton)
+
+<a class="anchor release_tag" name="v0_46_1"></a>
+<h1><a href="#v0_46_1">Tag: v0.46.1</a></h1>
+
+##### Branch: 'master'
+
+##### by Priyavadan Kumar on 05-May-2020 16:48PM
+
+
+Interface can now specify the subdirectory location in the output folder.
+Default behavior is unchanged to ensure backwards compatibility.
+
+<a class="anchor release_tag" name="v0_46_0"></a>
+<h1><a href="#v0_46_0">Tag: v0.46.0</a></h1>
+
+##### Branch: 'master'
+
+##### by info-rchitect on 15-Apr-2020 09:53AM
+
+
+* PR#154: Enable test methods and test method parameters using non-snakecase nomenclature
+to be used in SMT7
+
+<a class="anchor release_tag" name="v0_45_4"></a>
+<h1><a href="#v0_45_4">Tag: v0.45.4</a></h1>
+
+##### Branch: 'master'
+
+##### by Paul DeRouen on 31-Mar-2020 10:44AM
+
+
+added tester.digsrc\_skip\_start(:pin\_or\_group\_name) to skip start insertion for digsrc
+overlay
+
+<a class="anchor release_tag" name="v0_45_3"></a>
+<h1><a href="#v0_45_3">Tag: v0.45.3</a></h1>
+
+##### Branch: 'master'
+
+##### by Priyavadan Kumar on 16-Mar-2020 18:37PM
+
+
+Bugfix for force\_serial local\_flag implementation
+
+<a class="anchor release_tag" name="v0_45_2"></a>
+<h1><a href="#v0_45_2">Tag: v0.45.2</a></h1>
+
+##### Branch: 'master'
+
+##### by info-rchitect on 24-Feb-2020 10:34AM
+
+
+* Inhibit vectors bug fixes
+* nil flag check error handling
+* Match loop bug fixes
+* Removed testing for Ruby 2.3
+
+<a class="anchor release_tag" name="v0_45_1"></a>
+<h1><a href="#v0_45_1">Tag: v0.45.1</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 28-Jan-2020 12:26PM
+
+
+Fix V93K capture vector counting when loops are involved (TS Chung)
+
+<a class="anchor release_tag" name="v0_45_0"></a>
+<h1><a href="#v0_45_0">Tag: v0.45.0</a></h1>
+
+##### Branch: 'master'
+
+##### by info-rchitect on 15-Jan-2020 10:48AM
+
+
+* Added support for naming sub-flows
+
+~~~ruby
+import :my\_sub\_flow, name: 'new\_sub\_flow\_name'
+~~~
+
+<a class="anchor release_tag" name="v0_44_1"></a>
+<h1><a href="#v0_44_1">Tag: v0.44.1</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 19-Dec-2019 02:28AM
+
+
+Fixed V93K subroutine pattern generation
+
+<a class="anchor release_tag" name="v0_44_0"></a>
+<h1><a href="#v0_44_0">Tag: v0.44.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Priyavadan Kumar on 05-Dec-2019 11:21AM
+
+
+Enabled Bypass option on the 93K
+
+<a class="anchor release_tag" name="v0_43_0"></a>
+<h1><a href="#v0_43_0">Tag: v0.43.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Daniel Hadad on 11-Nov-2019 14:23PM
+
+
+Allow import of top-level flow during test program generation.
+
+<a class="anchor release_tag" name="v0_42_0"></a>
+<h1><a href="#v0_42_0">Tag: v0.42.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Corey Engelken on 08-Sep-2019 13:16PM
+
+
+Added decompilation support and updated timesets for better syncing between the tester and
+the dut instances. See the guides for details on both.
+
+<a class="anchor release_tag" name="v0_41_0"></a>
+<h1><a href="#v0_41_0">Tag: v0.41.0</a></h1>
+
+##### Branch: 'master'
+
+##### by info-rchitect on 16-Aug-2019 11:27AM
+
+
+* PR#134: Make target reload optional during flow generation
+* PR#133: Add support for the V93K `force\_serial` test method parameter
+* PR#129: Make rendering limits in V93K flow file optional at the test method library
+level
+* PR#132: Ensure flow variable flags of mixed types are allowed
+* PR#131: Bug fix for V83K flow generation if no local flags present
+* PR#125: New feature, `when*` conditional statements for V93K flow generation
+* PR#130: New feature, `if\_any\_site` and `if\_all\_sites` control options for IG-XL flow
+generation
+
+<a class="anchor release_tag" name="v0_40_0"></a>
+<h1><a href="#v0_40_0">Tag: v0.40.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 24-Jul-2019 02:40AM
+
+
+Added support for V93K SMT8
+
+<a class="anchor release_tag" name="v0_31_0"></a>
+<h1><a href="#v0_31_0">Tag: v0.31.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 26-Jun-2019 06:40AM
+
+
+Added support for attributes to be defined as boolean types in V93K custom test method
+definitions
+
+<a class="anchor release_tag" name="v0_30_0"></a>
+<h1><a href="#v0_30_0">Tag: v0.30.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Stephen McGinty on 20-Jun-2019 03:21AM
+
+
+Incorporated ATP gem into OrigenTesters
+
 <a class="anchor release_tag" name="v0_21_0"></a>
 <h1><a href="#v0_21_0">Tag: v0.21.0</a></h1>
 

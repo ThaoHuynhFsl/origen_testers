@@ -31,12 +31,21 @@ class OrigenTestersApplication < Origen::Application
         section.page :interface, heading: "Creating an Interface"
         section.page :resources, heading: "Additional Resources"
         section.page :code, heading: "Dynamic Custom Code"
+        section.page :charz, heading: "Characterization API"
         section.page :j750, heading: "J750 API"
-        section.page :v93k, heading: "V93K API"
+        section.page :v93k, heading: "V93K Common API"
+        section.page :v93ksmt7, heading: "V93K SMT7 API"
+        section.page :v93ksmt8, heading: "V93K SMT8 API"
         section.page :ultraflex, heading: "UltraFLEX API"
         section.page :doc, heading: "Documenting the Program"
         section.page :custom, heading: "Creating Custom Testers"
         section.page :generating, heading: "Running the ProgGen"
+      end
+      index.section :decompilation, heading: "Decompilation", before: :simulation do |section|
+        section.page :overview, heading: "Overview & Example"
+        section.page :decompilerapi, heading: "Decompiling, Adding Pins, & Executing"
+        section.page :universalapi, heading: "Working with Decompiled Patterns"
+        section.page :platformspecifics, heading: "Platform Specifics"
       end
     end
   }
