@@ -95,7 +95,6 @@ module OrigenTesters
             end
           end
 
-
           # In IG-XL you can't set the same flag in case of pass or fail, that situation should
           # never occur unless the user has manually set up that condition
           if line.flag_fail && line.flag_fail == line.flag_pass
