@@ -418,6 +418,9 @@ module OrigenTesters::ATP
               children << s.updated(:sub_test, nil)
             end
           end
+          if options[:igxl]
+            children << n1(:igxl, options[:igxl])
+          end
 
           if before_on_fail
             on_fail_node = on_fail(before_on_fail)
