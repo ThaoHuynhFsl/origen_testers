@@ -99,8 +99,10 @@ module OrigenTesters
         @min_repeat_loop = 33
         if smt8?
           @pat_extension = 'pat'
+          @program_comment_char = ['println', '//']
         else
           @pat_extension = 'avc'
+          @program_comment_char = ['print_dl', '//']
         end
         @compress = true
         # @support_repeat_previous = true
@@ -115,7 +117,7 @@ module OrigenTesters
         @overlay_style = :subroutine	# default to use subroutine for overlay
         @capture_style = :hram			# default to use hram for capture
         @overlay_subr = nil
-        @overlay_history = {}			# used to track labels, subroutines, digsrc pins used etc
+        @overlay_history = {} # used to track labels, subroutines, digsrc pins used etc
 
         if options[:add_flow_enable]
           self.add_flow_enable = options[:add_flow_enable]
@@ -210,7 +212,6 @@ module OrigenTesters
                 cc "#{overlay_str}"
                 @overlay_history[overlay_str] = { is_label: true }
               end
-
             when :handshake
               if @delayed_handshake
                 if @delayed_handshake != overlay_str
@@ -466,7 +467,6 @@ module OrigenTesters
         # Ensure the match pins are don't care by default
         pin.dont_care
         options[:pin2].dont_care if options[:pin2]
-
         if !options[:pin2]
           cc "for the #{pin.name.upcase} pin to go #{state.to_s.upcase}"
           match_block(timeout_in_cycles, options) do |match_or_conditions, fail_conditions|

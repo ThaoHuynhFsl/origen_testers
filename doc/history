@@ -1,12 +1,77 @@
-<a class="anchor release_tag" name="v0_49_0_pre0"></a>
-<h2><a href="#v0_49_0_pre0">Tag: v0.49.0.pre0</a></h2>
+<a class="anchor release_tag" name="v0_49_3"></a>
+<h1><a href="#v0_49_3">Tag: v0.49.3</a></h1>
 
 ##### Branch: 'master'
 
-##### by Thao Huynh on 14-Oct-2020 09:08AM
+##### by Priyavadan Kumar on 28-Sep-2021 13:32PM
 
 
-Merge changes in ATP since ATP standalone is no longer use
+* @CodyHorton: Charz API: error messages for missing routines in profile definition
+
+<a class="anchor release_tag" name="v0_49_2"></a>
+<h1><a href="#v0_49_2">Tag: v0.49.2</a></h1>
+
+##### Branch: 'master'
+
+##### by Daniel Hadad on 13-Sep-2021 07:58AM
+
+
+Added program_comment_char support for v93k (smt7 and smt8).
+Added ability for user to modify comment_char or program_comment_char for any tester at
+app level.
+
+<a class="anchor release_tag" name="v0_49_1"></a>
+<h1><a href="#v0_49_1">Tag: v0.49.1</a></h1>
+
+##### Branch: 'master'
+
+##### by Daniel Hadad on 13-Aug-2021 16:30PM
+
+
+Added support for flow control loops for v93k only (SMT7).
+
+<a class="anchor release_tag" name="v0_49_0"></a>
+<h1><a href="#v0_49_0">Tag: v0.49.0</a></h1>
+
+##### Branch: 'master'
+
+##### by Daniel Hadad on 01-Jul-2021 07:10AM
+
+
+Added a couple of features for 93k support:
+- added priority support for stm8 (PR #166)
+- added custom label comments support to permit label-type overlays (PR #174)
+
+<a class="anchor release_tag" name="v0_48_3"></a>
+<h1><a href="#v0_48_3">Tag: v0.48.3</a></h1>
+
+##### Branch: 'master'
+
+##### by Paul DeRouen on 15-Apr-2021 09:58AM
+
+
+several bug fixes
+
+<a class="anchor release_tag" name="v0_48_2"></a>
+<h1><a href="#v0_48_2">Tag: v0.48.2</a></h1>
+
+##### Branch: 'master'
+
+##### by Paul DeRouen on 30-Oct-2020 14:00PM
+
+
+allow defered binning with uflex flow generation when all limits are provided as sub-tests
+
+<a class="anchor release_tag" name="v0_48_1"></a>
+<h1><a href="#v0_48_1">Tag: v0.48.1</a></h1>
+
+##### Branch: 'master'
+
+##### by Priyavadan Kumar on 27-Oct-2020 07:41AM
+
+
+* Updated charz API to allow a clear-cut entry point to override for implementing company custom charz routines - [@Cody Horton]
+* Charz API Routine Handler entry point
 
 <a class="anchor release_tag" name="v0_48_0"></a>
 <h1><a href="#v0_48_0">Tag: v0.48.0</a></h1>
