@@ -653,7 +653,7 @@ module OrigenTesters
           if smt8?
             # Currently only rendering pass bins or those not associated with a test (should come from the bin
             # table if its associated with a test)
-            if node.to_a[0] == 'pass' || @open_test_methods.empty?
+            if node.to_a[0] == 'pass' # || @open_test_methods.empty?
               line "addBin(#{sbin || bin});"
             end
           else
