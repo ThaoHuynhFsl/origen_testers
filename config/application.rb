@@ -56,7 +56,7 @@ class OrigenTestersApplication < Origen::Application
   config.initials = 'OrigenTesters'
   self.name = 'origen_testers'
   self.namespace = 'OrigenTesters'
-  config.rc_url   = "git@github.com:Origen-SDK/origen_testers.git"
+  config.rc_url   = "git@github.com:ThaoHuynhFsl/origen_testers.git"
   config.release_externally = true
 
   # Added list of directory to exclude when run running origen rc unman
