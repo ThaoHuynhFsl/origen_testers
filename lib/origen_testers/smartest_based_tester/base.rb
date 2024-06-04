@@ -83,6 +83,18 @@ module OrigenTesters
       # (SMT8 only)
       attr_accessor :print_all_params
 
+      # Whether the pattern execution stops when the match loop fails (stopOnFail) or continues after the REPEATEND statement (continueOnFail).
+      # (SMT8 only)
+      attr_reader :match_continue_on_fail
+
+      # If the optional inverted keyword is added, the loop matches whenever a comparison fails
+      # (SMT8 only)
+      attr_reader :match_inverted
+
+      # wait time (s or ms) instead of repeat count
+      # (SMT8 only)
+      attr_reader :max_wait_in_time
+
       def initialize(options = {})
         options = {
           # whether to use multiport bursts or not, if so this indicates the name of the port to use
@@ -92,6 +104,10 @@ module OrigenTesters
         }.merge(options)
 
         @smt_version = options[:smt_version] || 7
+
+        @match_continue_on_fail = options[:match_continue_on_fail]
+        @match_inverted = options[:match_inverted]
+        @max_wait_in_time = options[:max_wait_in_time]
 
         @separate_bins_file = options[:separate_bins_file] || false
         if options.key?(:zip_patterns)
@@ -542,6 +558,11 @@ module OrigenTesters
           fail 'ERROR: block not passed to match_block!'
         end
 
+        # take in the wait in time options for later usage
+        if @max_wait_in_time
+          @max_wait_in_time_options = options
+        end
+
         # Create BlockArgs objects in order to receive multiple blocks
         match_conditions = Origen::Utility::BlockArgs.new
         fail_conditions = Origen::Utility::BlockArgs.new
@@ -591,6 +612,13 @@ module OrigenTesters
           end
 
           match_microcode.concat(" #{number_of_loops};") unless @inhibit_vectors
+
+          # for now forcing 8 vector for the pipe line cleaner - when using wait as time, might need to
+          # investigate with using count
+          # mrpt value might depends on the xMODE, need to find out how many xMODE there are in SM8
+          if @max_wait_in_time
+            mrpt = 8
+          end
 
           # Now do the wait loop, mrpt should always be a multiple of 8
           microcode "SQPG MRPT #{mrpt};"
