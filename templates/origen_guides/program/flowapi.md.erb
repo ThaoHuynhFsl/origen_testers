@@ -280,6 +280,9 @@ test :test2, if_flag: :my_pass_flag
 unless_flag :my_pass_flag do
   test :test3
 end
+
+log "Example of manually unsetting flag"
+test :test4, on_pass: { unset_flag :my_custom_flag1 }
 ~~~
 
 Note that flag names will usually be forced to uppercase, this is to institute a convention that
@@ -303,8 +306,29 @@ unless_enable "$MCEn_test" do
 end
 ~~~
 
+For custom environment libraries, there might be a need to reference a flag without using the native
+flag API. `add_flag` will allow the flow and sub-flow to have access to the flag without adding to the flow.
+
+~~~ruby
+log "Example of manually adding a flag to a flow without calling the flag"
+add_flag :my_custom_flag2
+~~~
+
 In all cases the `$` will be removed from the final flag name that appears in the test program.
 
+Whenever you set a flag or automation initializes a variable, you can remove the variable from initialization flow by labeling as a global flag
+with the `add_global_flag` API. The below example will set the `global` variable in the flow but not initialize it to a value. `non_global` will behave as normal.
+
+~~~ruby
+add_global_flag :global
+test :global_test1, on_fail: { set_flag: :$non_global }, continue: true
+unless_flag "$global" do
+  set_flag '$non_global'
+end
+if_flag "$non_global" do
+  set_flag '$global'
+end
+~~~
 
 
 #### Adding the V93K bypass option:
@@ -339,7 +363,7 @@ end
 ~~~
 
 
-#### Flow Loops for V93k (SMT7 only)
+#### Flow Loops for V93k
 Use flow loop control to permit re-running tests without using additional sequence labels.
 
 ~~~ruby
@@ -368,7 +392,21 @@ loop from: 0, to: 5, var: '$LOOP_VARIABLE', test_num_inc: 2 do
 end
 ~~~
 
+You can also provide a variable starting point:
+~~~ruby
+loop from: '$TEST_VARIABLE', to: 5, var: '$LOOP_VARIABLE' do
+    func :test_myloop6, number: 56600
+end
+~~~
+
 Decrementing loops, having `from:` value > `to:` value and using negative `step:`, is also supported.
+
+##### Loop Rules For Each Environment
+
+`SMT7` cannot support a variable stop location. Only the `from:` parameter is allowed to be a variable.
+
+`SMT8` cannot have a step other than -1 or 1. The limitations of the range flow restrict those steps.
+The `to:` parameter can be a flow variable just like `from:`.
  
 
 

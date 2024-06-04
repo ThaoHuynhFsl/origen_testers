@@ -220,6 +220,15 @@ module OrigenTesters::ATP
       @pipeline[0] = add_volatile_flags(@pipeline[0], flags)
     end
 
+    # Indicate the that given flags should keep state between units
+    # prevent them from being in the initialization block
+    # these flags will be the user's responsibility to initialize
+    def add_global_flag(*flags)
+      options = flags.pop if flags.last.is_a?(Hash)
+      flags = flags.flatten
+      @pipeline[0] = add_global_flag_to_node(@pipeline[0], flags)
+    end
+
     # Record a description for a bin number
     def describe_bin(number, description, options = {})
       @pipeline[0] = add_bin_description(@pipeline[0], number, description, type: :hard)
@@ -337,8 +346,11 @@ module OrigenTesters::ATP
 
           name = (options[:name] || options[:tname] || options[:test_name])
           unless name
-            [:name, :tname, :test_name].each do |m|
-              name ||= instance.respond_to?(m) ? instance.send(m) : nil
+            # Starting in Ruby3 type Symbol responds to name
+            unless instance.is_a?(Symbol)
+              [:name, :tname, :test_name].each do |m|
+                name ||= instance.respond_to?(m) ? instance.send(m) : nil
+              end
             end
           end
           children << n1(:name, name) if name
@@ -480,6 +492,21 @@ module OrigenTesters::ATP
       end
     end
 
+    def add_auxiliary_flow(name, options = {})
+      if tester.smt8?
+        if name.to_s != options[:path].split('.').last.to_s
+          fail "Auxiliary flow path does not end in '#{name}'. The path instead is '#{options[:path]}'. Please update the path to align with the provided name."
+        end
+        extract_meta!(options) do
+          apply_conditions(options) do
+            n2(:auxiliary_flow, n1(:name, name), n1(:path, options[:path]))
+          end
+        end
+      else
+        fail 'Auxiliary flow API is only usable in SMT8.'
+      end
+    end
+
     def bin(number, options = {})
       if number.is_a?(Hash)
         fail 'The bin number must be passed as the first argument'
@@ -548,6 +575,22 @@ module OrigenTesters::ATP
       end
     end
 
+    def unset_flag(flag, options = {})
+      extract_meta!(options) do
+        apply_conditions(options) do
+          unset_flag_node(flag)
+        end
+      end
+    end
+
+    def add_flag(flag, options = {})
+      extract_meta!(options) do
+        apply_conditions(options) do
+          add_flag_node(flag)
+        end
+      end
+    end
+
     def set(var, val, options = {})
       extract_meta!(options) do
         apply_conditions(options) do
@@ -609,7 +652,9 @@ module OrigenTesters::ATP
       end
       # Add node for set of flag to be used for loop
       unless args[0][:var].nil?
-        set(args[0][:var], 0)
+        unless tester.smt8?
+          set(args[0][:var], 0)
+        end
       end
       extract_meta!(options) do
         apply_conditions(options) do
@@ -939,6 +984,14 @@ module OrigenTesters::ATP
       n1(:set_flag, flag)
     end
 
+    def unset_flag_node(flag)
+      n1(:unset_flag, flag)
+    end
+
+    def add_flag_node(flag)
+      n1(:add_flag, flag)
+    end
+
     # Ensures the flow ast has a volatile node, then adds the
     # given flags to it
     def add_volatile_flags(node, flags)
@@ -947,6 +1000,24 @@ module OrigenTesters::ATP
         v = nodes.shift
       else
         v = n0(:volatile)
+      end
+      existing = v.children.map { |f| f.type == :flag ? f.value : nil }.compact
+      new = []
+      flags.each do |flag|
+        new << n1(:flag, flag) unless existing.include?(flag)
+      end
+      v = v.updated(nil, v.children + new)
+      node.updated(nil, [name, v] + nodes)
+    end
+
+    # Ensures the flow ast has a global node, then adds the
+    # given flags to it
+    def add_global_flag_to_node(node, flags)
+      name, *nodes = *node
+      if nodes[0] && nodes[0].type == :global
+        v = nodes.shift
+      else
+        v = n0(:global)
       end
       existing = v.children.map { |f| f.type == :flag ? f.value : nil }.compact
       new = []
