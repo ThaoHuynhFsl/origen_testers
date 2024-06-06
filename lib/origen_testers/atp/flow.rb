@@ -424,7 +424,11 @@ module OrigenTesters::ATP
             options[:force_value] = options[:force] if options[:force]
             options[:force_value] = options[:extbias] if options[:extbias]
             children << n(:force_value, [options[:force_value]])
-          end  
+          end
+
+          if options[:op]
+            children << n(:custom_op, [options[:op]])
+          end
 
           if options[:units]
             children << n(:units, [options[:units]])
