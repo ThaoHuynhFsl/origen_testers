@@ -95,7 +95,7 @@ module OrigenTesters
       # (SMT8 only)
       attr_reader :max_wait_in_time
 
-      # When set to true, the path to the flow will have insertion in the subdirectories
+      # When set to true, the flow path will have insertion in the subdirectories
       # (SMT8 only)
       attr_reader :insertion_in_the_flow_path
 
