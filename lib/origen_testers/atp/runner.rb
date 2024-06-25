@@ -36,7 +36,7 @@ module OrigenTesters::ATP
         flag, *nodes = *node
         flag = [flag].flatten
         enabled = node.type == :if_flag
-        active = flag.any? { |f| set_flags.include?(f) }
+        active = flag.any?
         if (enabled && active) || (!enabled && !active)
           process_all(nodes)
         end
@@ -54,7 +54,7 @@ module OrigenTesters::ATP
         flag, *nodes = *node
         flag = [flag].flatten
         enabled = node.type == :if_enabled
-        active = flag.any? { |f| set_enables.include?(f) }
+        active = flag.any?
         if (enabled && active) || (!enabled && !active)
           process_all(nodes)
         end
@@ -187,6 +187,7 @@ module OrigenTesters::ATP
       unless job
         fail 'Flow contains JOB-based conditions and no current JOB has been given!'
       end
+
       if state
         process_all(node) if jobs.include?(job)
       else
