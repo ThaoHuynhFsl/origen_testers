@@ -129,8 +129,9 @@ module OrigenTesters
               end
               if sbin = set_result.find(:softbin)
                 o[:bin_s_num] = sbin.to_a[0] || o[:bin_s_num]
-                # o[:bin_s_name] = bin_names[:soft][sbin.to_a[0]][:name]
-                o[:bin_s_name] = sbin.to_a[1]
+                if o[:bin_s_name].nil?
+                  o[:bin_s_name] = bin_names[:soft][sbin.to_a[0]][:name]
+                end
               end
             end
             delayed = on_fail.find(:delayed)
