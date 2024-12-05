@@ -125,13 +125,14 @@ module OrigenTesters
               if @max_wait_in_time
                 time_unit = 's'
                 wait_time = 0
-                @max_wait_in_time_options.each do |key, value|
+                @max_wait_in_time_options[@max_wait_in_time_index_smt8].each do |key, value|
                   if key =~ /time_in_/ && value != 0
                     time_unit = key.to_s.gsub('time_in_', '')
                     wait_time = value
                   end
                 end
                 @program_lines << "    <Instruction id=\"match\" value=\"#{wait_time} #{time_unit}\">"
+                @max_wait_in_time_index_smt8 = @max_wait_in_time_index_smt8 + 1
               else
                 @program_lines << "    <Instruction id=\"match\" value=\"#{Regexp.last_match(1)}\">"
               end

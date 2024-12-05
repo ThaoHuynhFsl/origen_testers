@@ -112,6 +112,9 @@ module OrigenTesters
         @match_continue_on_fail = options[:match_continue_on_fail]
         @match_inverted = options[:match_inverted]
         @max_wait_in_time = options[:max_wait_in_time]
+        @max_wait_in_time_index = 0
+        @max_wait_in_time_index_smt8 = 0
+        @max_wait_in_time_options = []
 
         @separate_bins_file = options[:separate_bins_file] || false
         if options.key?(:zip_patterns)
@@ -565,7 +568,8 @@ module OrigenTesters
 
         # take in the wait in time options for later usage
         if @max_wait_in_time
-          @max_wait_in_time_options = options
+          @max_wait_in_time_options[@max_wait_in_time_index] = options
+          @max_wait_in_time_index = @max_wait_in_time_index + 1
         end
 
         # Create BlockArgs objects in order to receive multiple blocks
