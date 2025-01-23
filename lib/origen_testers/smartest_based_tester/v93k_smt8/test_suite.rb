@@ -67,7 +67,11 @@ module OrigenTesters
           seq_namespace  = self.seq_namespace || tester.package_namespace
           seq_path       = self.seq_path || tester.seq_path
           l = []
-          l << "suite #{name} calls #{test_method.klass[0].downcase + test_method.klass[1..-1]} {"
+          if tester.keep_test_method_class_case
+            l << "suite #{name} calls #{test_method.klass[0] + test_method.klass[1..-1]} {"
+          else
+            l << "suite #{name} calls #{test_method.klass[0].downcase + test_method.klass[1..-1]} {"
+          end
           if pattern && !pattern.to_s.empty?
             l << "    #{prefix}pattern = setupRef(#{seq_namespace}.patterns.#{pattern});"
           end

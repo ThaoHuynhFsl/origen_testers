@@ -99,6 +99,10 @@ module OrigenTesters
       # (SMT8 only)
       attr_reader :insertion_in_the_flow_path
 
+      # When set to true, the test method case will not change to all lower case - it keep the as is name from the app
+      # (SMT8 only)
+      attr_reader :keep_test_method_class_case
+
       def initialize(options = {})
         options = {
           # whether to use multiport bursts or not, if so this indicates the name of the port to use
@@ -156,6 +160,7 @@ module OrigenTesters
         @overlay_subr = nil
         @overlay_history = {} # used to track labels, subroutines, digsrc pins used etc
         @insertion_in_the_flow_path = options[:insertion_in_the_flow_path] # add insertion for path to the flows
+        @keep_test_method_class_case = options[:keep_test_method_class_case] # add insertion for path to the flows
 
         if options[:add_flow_enable]
           self.add_flow_enable = options[:add_flow_enable]
