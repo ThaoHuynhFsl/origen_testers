@@ -127,8 +127,12 @@ module OrigenTesters
                 wait_time = 0
                 @max_wait_in_time_options[@max_wait_in_time_index_smt8].each do |key, value|
                   if key =~ /time_in_/ && value != 0
-                    time_unit = key.to_s.gsub('time_in_', '')
+                    time_unit = key.to_s.split('_').last
+                    if time_unit == 'cycles'
+                      time_unit = ''  # just print out number of cycles
+                    end
                     wait_time = value
+                    break
                   end
                 end
                 @program_lines << "    <Instruction id=\"match\" value=\"#{wait_time} #{time_unit}\">"
