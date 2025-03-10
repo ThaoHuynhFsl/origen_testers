@@ -22,19 +22,23 @@ module OrigenTesters
           }.merge(options)
           attrs = @softbins[number] || {}
 
-          attrs[:name] = options[:name] if options[:name]
-          attrs[:bin] = options[:bin] if options[:bin]
-          if !attrs[:result] || (options[:result] && options[:result] != 'FAIL')
-            attrs[:result] = options[:result]
-          end
-          if !attrs[:color] || (options[:color] && options[:color] != 'RED')
-            attrs[:color] = options[:color]
-          end
-          if !attrs[:priority] || (options[:priority] && options[:priority] != 2)
-            attrs[:priority] = options[:priority]
-          end
+          # This function might be executed more times, and the options might be changed at the next pass
+          # Therefore only the first pass will define the proper attributes for each softbin
+          if @softbins[number].nil?
+            attrs[:name] = options[:name] if options[:name]
+            attrs[:bin] = options[:bin] if options[:bin]
+            if !attrs[:result] || (options[:result] && options[:result] != 'FAIL')
+              attrs[:result] = options[:result]
+            end
+            if !attrs[:color] || (options[:color] && options[:color] != 'RED')
+              attrs[:color] = options[:color]
+            end
+            if !attrs[:priority] || (options[:priority] && options[:priority] != 2)
+              attrs[:priority] = options[:priority]
+            end
 
-          @softbins[number] = attrs
+            @softbins[number] = attrs
+          end
         end
 
         def add_bin(number, options = {})
